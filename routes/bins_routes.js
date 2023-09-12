@@ -6,7 +6,7 @@ const binRouter = express.Router();
 binRouter.post('/', (req, res) => {
   // enter url into the postgres db
   let url = genRanHex()
-  response.send('<h1>Hello World</h1>');
+  res.send('<h1>Hello World</h1>');
 });
 
 // delete a bin
