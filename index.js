@@ -4,6 +4,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
+
 const binRouter = require('./routes/bins_routes');
 const requestRouter = require('./routes/requests_routes');
 
