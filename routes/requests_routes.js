@@ -1,4 +1,8 @@
+const config = require('../helpers/config')
 const express = require('express')
+const logger = require('../helpers/logger')
+const mongoose = require('mongoose')
+const HTTPRequest = require('../models/requests')
 const requestRouter = express.Router();
 
 // ALL /:bin_id/requests   create new request (and record to db)
@@ -16,34 +20,71 @@ const requestRouter = express.Router();
 //   res.status(200);
 // });
 
-// GET /:bin_id/requests/:id
-requestRouter.get('/:bin_id/requests/:id', (req, res) => {
-  const mongoId = req.params.id;
+mongoose.connect(config.MONGODB_URI)
+  .then(() => {
+    logger.info('connected to MongoDB')
+  })
+  .catch((error) => {
+    logger.error('error connecting to MongoDB:', error.message)
+  });
 
-  // Query mongo database with mongoId
-  // Error handling
-  // Assign requestData
-  res.json(requestData);
+/*
+requestRouter.post('/:bin_id/requests/:id', async (req, res) => {
+  const request = new HTTPRequest({ 
+    headers: req.headers,
+    body: req.body.body,
+    method: req.method,
+    query: req.query,
+    path: req.path,
+    clientIP: req.ip
+  });
+
+  // ADD THE RETURNED OBJECT ID TO THE POSTGRES!
+  request.save().then((returnedObject) => console.log(returnedObject.id));
+})
+*/
+
+
+
+// GET /:bin_id/requests/:id
+requestRouter.get('/:bin_id/requests/:id', async (req, res) => {
+  const id = req.params.id;
+  // get mongoId from Postgres
+
+  let mongoId;
+  let httpRequest = await HTTPRequest.findById(mongoId);
+  if (httpRequest) {
+    res.json(httpRequest);
+  } else {
+    res.status(404).end();
+  }
 });
 
 // DELETE  /api/requests/:bin_id/:req_id
-requestRouter.delete('/:bin_id/requests/:id', (req, res) => {
-  const mongoId = req.params.id;
+requestRouter.delete('/:bin_id/requests/:id', async (req, res) => {
+  const id = req.params.id;
+  // get mongoId from Postgres
 
-  // Query mongo database with mongoId to delete record
-  // Error handling
-  res.status(204).end()
+  let mongoId;
+  await HTTPRequest.findByIdAndRemove(mongoId);
+  res.status(204).end();
 });
 
 // ? DELETE    /api/...?  - delete all requests
-requestRouter.delete('/:bin_id/requests', (req, res) => {
+requestRouter.delete('/:bin_id/requests', async (req, res) => {
   const binId = req.params.bin_id;
-
-  // Error handling
   // Query PostgresQL database with binId for list of all requests
+  // what is the type of the array elements?
   let allRequests = [];
-  // Iterate through all requests and delete them
-  res.status(204).end()
+  
+  try {
+    for (const requestId of allRequests) {
+      await HTTPRequest.findByIdAndRemove(requestId)
+    }
+    res.status(204).end()
+  } catch (error) {
+    res.status(410).end()
+  }
 });
 
 
