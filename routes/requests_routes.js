@@ -32,7 +32,7 @@ mongoose.connect(config.MONGODB_URI)
 requestRouter.post('/:bin_id/requests/:id', async (req, res) => {
   const request = new HTTPRequest({ 
     headers: req.headers,
-    body: req.body.body,
+    body: req.body,
     method: req.method,
     query: req.query,
     path: req.path,
