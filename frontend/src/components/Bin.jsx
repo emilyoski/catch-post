@@ -1,4 +1,4 @@
-export default function Bin({ url, timestamp, handleClick }) {
+export default function Bin({ url, timestamp, handleClick, handleDelete }) {
   return (
     <div
       onClick={handleClick}
@@ -6,7 +6,10 @@ export default function Bin({ url, timestamp, handleClick }) {
       style={{ border: "1px solid black" }}
       className="item"
     >
-      {url} {timestamp} <span className="delete-item">X</span>
+      {`/${url}`} {timestamp}{" "}
+      <span onClick={handleDelete} className="delete-item">
+        X
+      </span>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import BinNavigation from "./components/Bin-Navigation";
 import RequestNavigation from "./components/Requests-Navigation";
 import RequestDisplay from "./components/Request-Display";
 
-function App() {
+export default function App() {
   const [selectedBin, setSelectedBin] = useState("");
   const [selectedRequest, setSelectedRequest] = useState("");
 
@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <main>
+    <main className="main">
       <BinNavigation handleClick={handleBinRequest} />
       <RequestNavigation
         selectedBin={selectedBin}
@@ -35,5 +35,3 @@ function App() {
     </main>
   );
 }
-
-export default App;

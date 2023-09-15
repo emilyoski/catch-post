@@ -4,6 +4,7 @@ export default function Request({
   timestamp,
   ui_id,
   handleClick,
+  handleDelete,
 }) {
   return (
     <div
@@ -13,7 +14,9 @@ export default function Request({
       className="item"
     >
       {method} {path} {timestamp}
-      <span className="delete-item">X</span>
+      <span onClick={handleDelete} className="delete-item">
+        X
+      </span>
     </div>
   );
 }
