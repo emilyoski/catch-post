@@ -24,7 +24,9 @@ export default function RequestNavigation({ selectedBin, handleClick }) {
       setRequests(data.requests);
     };
 
-    getRequests();
+    if (selectedBin) {
+      getRequests();
+    }
   }, [selectedBin]);
 
   async function handleDelete(event) {
@@ -49,20 +51,22 @@ export default function RequestNavigation({ selectedBin, handleClick }) {
     <div className="request column">
       <h1 className="request-title">Requests</h1>
       <ul>
-        {requests.map(({ method, path, timestamp, ui_id }, idx) => {
-          return (
-            <li key={idx}>
-              <Request
-                ui_id={ui_id}
-                path={path}
-                method={method}
-                timestamp={timestamp}
-                handleClick={handleClick}
-                handleDelete={handleDelete}
-              />
-            </li>
-          );
-        })}
+        {requests.map(
+          ({ http_method, http_path, time_of_request, ui_id }, idx) => {
+            return (
+              <li key={idx}>
+                <Request
+                  ui_id={ui_id}
+                  path={http_path}
+                  method={http_method}
+                  timestamp={time_of_request}
+                  handleClick={handleClick}
+                  handleDelete={handleDelete}
+                />
+              </li>
+            );
+          }
+        )}
       </ul>
     </div>
   );

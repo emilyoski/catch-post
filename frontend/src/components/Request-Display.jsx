@@ -7,10 +7,22 @@ export default function RequestDisplay({ selectedBin, selectedRequest }) {
 
   useEffect(() => {
     const getRequest = async () => {
-      const response = await axios.get(
-        `/api/bins/${selectedBin}/requests/${selectedRequest}`
+      // const response = await axios.get(
+      //   `/api/bins/${selectedBin}/requests/${selectedRequest}`
+      // );
+      // setRequestData(response.data);
+      const response = await fetch(
+        `https://buffalo-set-gull.ngrok-free.app/api/bins/${selectedBin}/requests/${selectedRequest}`,
+        {
+          method: "get",
+          headers: new Headers({
+            "ngrok-skip-browser-warning": "485737",
+          }),
+        }
       );
-      setRequestData(response.data);
+
+      let data = await response.json();
+      setRequestData(data);
     };
 
     if (selectedRequest) {
