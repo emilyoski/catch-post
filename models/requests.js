@@ -6,7 +6,7 @@ const requestSchema = new mongoose.Schema({
   method: String,
   query: Object,
   path: String,
-  clientIP: String
+  clientIP: String,
 });
 
 requestSchema.set('toJSON', {

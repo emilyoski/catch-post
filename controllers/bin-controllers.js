@@ -1,23 +1,17 @@
 const genRanHex = require("../helpers/generate_hex");
+// const filteroutIds = require("../helpers/filterout_id"); // code debt - filtering out all pg ids before sending to data to client
 const client = require("../config/postgres");
-let count = 0;
-let fakeBins = [
-  {
-    id: 0,
-    urlPath: "cf3df84e",
-  }
-];
 
 const createBin = async (req, res) => {
   let urlPath = genRanHex(8);
+
   try {
     await client.query('INSERT INTO bins (url_path) VALUES ($1);', [urlPath]);
+    res.status(200).json({ binUrl: urlPath });
   } catch (err) {
     res.status(500).json({msg: 'An unknown error occured.'});
   }
-  res.status(200).json({ binUrl: urlPath });
 }
-
 
 const getBin = async (req, res) => {
   let binId = req.params.bin_id;
@@ -31,13 +25,11 @@ const getBin = async (req, res) => {
   try {
     let result = await client.query('SELECT * FROM bins WHERE url_path = $1', [binId]);
     foundBin = result.rows[0];
-    await client.end()
+
+    res.status(200).json({ bin: foundBin }); // code debt: if bin dous not exist, return error instead of empty object
   } catch (err) {
     res.status(500).json({msg: 'An unknown error occured.'});
   }
-  
-  // return bin info - need to remove pg Pk id
-  res.status(200).json({ bin: foundBin });
 };
 
 const getAllBins = async (req, res) => {
@@ -45,15 +37,10 @@ const getAllBins = async (req, res) => {
   try {
     let result = await client.query('SELECT * FROM bins');
     allBins = result.rows;
-    await client.end()
+    res.status(200).json({ bin: allBins });
   } catch (err) {
     res.status(500).json({msg: 'An unknown error occured.'});
   }
-
-  // console.log(allBins);
-  
-  // return bin info - need to remove pg Pk id
-  res.status(200).json({ bin: allBins });
 };
 
 const deleteBin = async (req, res) => {
@@ -64,17 +51,13 @@ const deleteBin = async (req, res) => {
     res.status(404).json({msg: `Bin with id ${binId} does not exist.`})
   }
 
-  // try deleting bin from pg
   try {
     await client.query('DELETE FROM bins WHERE url_path = $1', [binId]);
-    await client.end();
+    res.status(200).json({ msg: `Bin with id ${binId} is successfully deleted.`}); // code debt: if bin does not exist, return error instead of successful msg
   } catch (err) {
-    res.status(500).json({msg: 'An unknown error occured.'});
+    res.status(500).json({msg: 'An unknown error occured. Bin was not deleted'});
     console.log("Error occurred");
   }
-
-  // console.log("Bin deleted");
-  res.status(200).json({ msg: `Bin with id ${binId} is successfully deleted.`});
 };
 
 

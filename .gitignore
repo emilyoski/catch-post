@@ -1,3 +1,4 @@
 ./node_modules
 .env
 request-bin.sql
+./tmp
