@@ -12,12 +12,12 @@ export default function RequestDisplay({ selectedBin, selectedRequest }) {
       // );
       // setRequestData(response.data);
       const response = await fetch(
-        `https://buffalo-set-gull.ngrok-free.app/api/bins/${selectedBin}/requests/${selectedRequest}`,
+        `http://localhost:3000/api/bins/${selectedBin}/requests/${selectedRequest}`,
         {
           method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "485737",
-          }),
+          // headers: new Headers({
+          //   "ngrok-skip-browser-warning": "485737",
+          // }),
         }
       );
 

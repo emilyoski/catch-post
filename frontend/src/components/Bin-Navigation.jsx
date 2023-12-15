@@ -6,11 +6,11 @@ export default function BinNavigation({ handleClick }) {
   const [bins, setBins] = useState([]);
 
   async function createNewBin() {
-    let response = await fetch(`https://buffalo-set-gull.ngrok-free.app/api`, {
+    let response = await fetch(`http://localhost:3000/api/bins`, {
       method: "post",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "485737",
-      }),
+      // headers: new Headers({
+      //   "ngrok-skip-browser-warning": "485737",
+      // }),
     });
     let data = await response.json();
     console.log(response.data);
@@ -24,11 +24,11 @@ export default function BinNavigation({ handleClick }) {
     // await axios.delete(`/api/${binUrl}`)
     // setBins(bins.filter((bin) => bin.url_path !== binUrl));
 
-    await fetch(`https://buffalo-set-gull.ngrok-free.app/api/${binUrl}`, {
+    await fetch(`http://localhost:3000/api/${binUrl}`, {
       method: "delete",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "485737",
-      }),
+      // headers: new Headers({
+      //   "ngrok-skip-browser-warning": "485737",
+      // }),
     });
 
     setBins(bins.filter((bin) => bin.url_path !== binUrl));
@@ -36,15 +36,12 @@ export default function BinNavigation({ handleClick }) {
 
   useEffect(() => {
     const getBins = async () => {
-      const response = await fetch(
-        "https://buffalo-set-gull.ngrok-free.app/api",
-        {
-          method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "485737",
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3000/api/bins", {
+        method: "get",
+        // headers: new Headers({
+        //   "ngrok-skip-browser-warning": "485737",
+        // }),
+      });
 
       const data = await response.json();
       console.log(data.bin);

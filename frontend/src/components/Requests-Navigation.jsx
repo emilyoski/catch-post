@@ -10,12 +10,12 @@ export default function RequestNavigation({ selectedBin, handleClick }) {
       // const response = await axios.get(`/api/bins/${selectedBin}/requests`);
       // setRequests(response.data.requests);
       const response = await fetch(
-        `https://buffalo-set-gull.ngrok-free.app/api/bins/${selectedBin}/requests`,
+        `http://localhost:3000/api/bins/${selectedBin}/requests`,
         {
           method: "get",
-          headers: new Headers({
-            "ngrok-skip-browser-warning": "485737",
-          }),
+          // headers: new Headers({
+          //   "ngrok-skip-browser-warning": "485737",
+          // }),
         }
       );
 
@@ -35,12 +35,12 @@ export default function RequestNavigation({ selectedBin, handleClick }) {
     // setRequests(requests.filter((request) => request.ui_id !== ui_id));
 
     await fetch(
-      `https://buffalo-set-gull.ngrok-free.app/api/bins/${selectedBin}/requests/${ui_id}`,
+      `http://localhost:3000/api/bins/${selectedBin}/requests/${ui_id}`,
       {
         method: "delete",
-        headers: new Headers({
-          "ngrok-skip-browser-warning": "485737",
-        }),
+        // headers: new Headers({
+        //   "ngrok-skip-browser-warning": "485737",
+        // }),
       }
     );
 
