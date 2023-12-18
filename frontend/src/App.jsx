@@ -1,4 +1,3 @@
-import "./App.css";
 import { useState } from "react";
 import BinNavigation from "./components/Bin-Navigation";
 import RequestNavigation from "./components/Requests-Navigation";
@@ -20,18 +19,20 @@ export default function App() {
   }
 
   return (
-    <main className="main">
-      <BinNavigation handleClick={handleBinRequest} />
-      <RequestNavigation
-        selectedBin={selectedBin}
-        handleClick={handleSelectedRequest}
-      />
-      <RequestDisplay
-        selectedBin={selectedBin}
-        selectedRequest={selectedRequest}
-      />
-      {selectedBin}
-      {selectedRequest}
+    <main>
+      <div className="m-9 flex">
+        <BinNavigation handleClick={handleBinRequest} />
+        <RequestNavigation
+          selectedBin={selectedBin}
+          handleClick={handleSelectedRequest}
+        />
+      </div>
+      <div className="m-9 flex">
+        <RequestDisplay
+          selectedBin={selectedBin}
+          selectedRequest={selectedRequest}
+        />
+      </div>
     </main>
   );
 }

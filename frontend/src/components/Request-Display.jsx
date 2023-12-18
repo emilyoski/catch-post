@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import JSONPretty from "react-json-pretty";
 
 export default function RequestDisplay({ selectedBin, selectedRequest }) {
@@ -7,10 +6,6 @@ export default function RequestDisplay({ selectedBin, selectedRequest }) {
 
   useEffect(() => {
     const getRequest = async () => {
-      // const response = await axios.get(
-      //   `/api/bins/${selectedBin}/requests/${selectedRequest}`
-      // );
-      // setRequestData(response.data);
       const response = await fetch(
         `http://localhost:3000/api/bins/${selectedBin}/requests/${selectedRequest}`,
         {
@@ -38,8 +33,10 @@ export default function RequestDisplay({ selectedBin, selectedRequest }) {
     return <div>No request selected</div>;
   }
 
+  console.log(requestData);
+
   return (
-    <div>
+    <div className="w-full p-4">
       <JSONPretty id="json-pretty" data={requestData}></JSONPretty>
     </div>
   );

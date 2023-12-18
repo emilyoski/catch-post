@@ -1,14 +1,11 @@
 import Request from "./Request";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 export default function RequestNavigation({ selectedBin, handleClick }) {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     const getRequests = async () => {
-      // const response = await axios.get(`/api/bins/${selectedBin}/requests`);
-      // setRequests(response.data.requests);
       const response = await fetch(
         `http://localhost:3000/api/bins/${selectedBin}/requests`,
         {
@@ -29,45 +26,50 @@ export default function RequestNavigation({ selectedBin, handleClick }) {
     }
   }, [selectedBin]);
 
-  async function handleDelete(event) {
-    const ui_id = event.target.parentElement.id;
-    // await axios.delete(`/api/bins/${selectedBin}/requests/${ui_id}`)
-    // setRequests(requests.filter((request) => request.ui_id !== ui_id));
+  function generateHandleDelete(ui_id) {
+    return async () => {
+      await fetch(
+        `http://localhost:3000/api/bins/${selectedBin}/requests/${ui_id}`,
+        {
+          method: "delete",
+          // headers: new Headers({
+          //   "ngrok-skip-browser-warning": "485737",
+          // }),
+        }
+      );
 
-    await fetch(
-      `http://localhost:3000/api/bins/${selectedBin}/requests/${ui_id}`,
-      {
-        method: "delete",
-        // headers: new Headers({
-        //   "ngrok-skip-browser-warning": "485737",
-        // }),
-      }
-    );
-
-    setRequests(requests.filter((request) => request.ui_id !== ui_id));
+      setRequests(requests.filter((request) => request.ui_id !== ui_id));
+    };
   }
 
   return (
-    <div className="request column">
-      <h1 className="request-title">Requests</h1>
-      <ul>
-        {requests.map(
-          ({ http_method, http_path, time_of_request, ui_id }, idx) => {
-            return (
-              <li key={idx}>
-                <Request
-                  ui_id={ui_id}
-                  path={http_path}
-                  method={http_method}
-                  timestamp={time_of_request}
-                  handleClick={handleClick}
-                  handleDelete={handleDelete}
-                />
-              </li>
-            );
-          }
-        )}
-      </ul>
+    <div className="w-1/2 p-4 divide-y divide-gray-200 overflow-hidden rounded-lg bg-teal-800 shadow ml-4">
+      <div className="px-4 py-5 sm:px-10 text-2xl">
+        <h1 className="">Requests for: {selectedBin}</h1>
+      </div>
+      <div className="px-4 py-5 sm:p-6">
+        <ul role="list" className="divide-y divide-gray-800">
+          {requests.map(
+            ({ http_method, http_path, time_of_request, ui_id }, idx) => {
+              return (
+                <li
+                  key={idx}
+                  className="flex justify-between gap-x-6 py-5 hover:bg-teal-700"
+                >
+                  <Request
+                    ui_id={ui_id}
+                    path={http_path}
+                    method={http_method}
+                    timestamp={time_of_request}
+                    handleClick={handleClick}
+                    handleDelete={generateHandleDelete(ui_id)}
+                  />
+                </li>
+              );
+            }
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
